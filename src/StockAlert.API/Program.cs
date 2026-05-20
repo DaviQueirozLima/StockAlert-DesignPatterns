@@ -9,9 +9,13 @@ using StockAlert.API.Workers;
 using StockAlert.Application.AlertRule.UseCases;
 using StockAlert.Application.Auth.UseCases;
 using StockAlert.Application.Services;
+using StockAlert.Application.Observers;
+using StockAlert.Application.Strategies;
 using StockAlert.Domain.Repositories;
 using StockAlert.Domain.Security;
 using StockAlert.Domain.Services;
+using StockAlert.Domain.Observers;
+using StockAlert.Domain.Strategies;
 using StockAlert.Infrastructure.Data;
 using StockAlert.Infrastructure.ExternalServices.Brapi;
 using StockAlert.Infrastructure.Repositories;
@@ -73,6 +77,17 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IStockRepository, StockRepository>();
 builder.Services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
 builder.Services.AddScoped<INotificationHistoryRepository, NotificationHistoryRepository>();
+
+builder.Services.AddScoped<AlertEventPublisher>();
+
+builder.Services.AddScoped<IAlertObserver, NotificationObserver>();
+builder.Services.AddScoped<IAlertObserver, NotificationHistoryObserver>();
+builder.Services.AddScoped<IAlertObserver, AlertRuleStatusObserver>();
+
+builder.Services.AddScoped<INotificationStrategy, EmailNotificationStrategy>();
+builder.Services.AddScoped<INotificationStrategy, UnsupportedWhatsappNotificationStrategy>();
+
+builder.Services.AddScoped<INotificationStrategyFactory, NotificationStrategyFactory>();
 
 #endregion
 
